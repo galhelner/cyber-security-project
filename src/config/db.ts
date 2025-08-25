@@ -1,12 +1,13 @@
+import { env } from "./env";
 import { Pool } from 'pg';
 
 // exports postgres connection pool
 export const pool = new Pool({
-  host: process.env.PGHOST,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  port: Number(process.env.PGPORT),
+  host: env.DB.HOST,
+  user: env.DB.USER,
+  password: env.DB.PASSWORD,
+  database: env.DB.NAME,
+  port: Number(env.DB.PORT),
 });
 
 // DB initialization function

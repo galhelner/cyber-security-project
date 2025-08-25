@@ -1,10 +1,7 @@
-import dotenv from "dotenv";
-// load environment variables from .env
-dotenv.config();
-
+import { env } from "./config/env";
 import express from 'express';
 import firewallRoutes from "./routes/firewall.routes";
-import { initDB } from "./db";
+import { initDB } from "./config/db";
 
 
 // server bootstrap function definition
@@ -25,7 +22,7 @@ async function bootstrap() {
   // mount routes under /api/firewall
   app.use("/api/firewall", firewallRoutes);
 
-  const PORT = process.env.PORT || 3000;
+  const PORT = env.PORT || 3000;
 
   // running the express server
   app.listen(PORT, () => {
