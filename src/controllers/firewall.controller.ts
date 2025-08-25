@@ -5,7 +5,9 @@ import { RuleMode } from '../types/ruleMode';
 import { FirewallRulesResponse } from '../models/firewallRulesResponse';
 import { FirewallRulesRequest } from '../models/firewallRulesRequest';
 
-// [POST] api/firewall/ip endpoint controller
+/**
+ * [POST] api/firewall/ip endpoint controller
+ */
 export const addIPs = async (req: Request, res: Response) => {
     try {
         const { values, mode } = req.body;
@@ -43,7 +45,9 @@ export const addIPs = async (req: Request, res: Response) => {
     }
 };
 
-// [DELETE] api/firewall/ip endpint controller 
+/** 
+ * [DELETE] api/firewall/ip endpint controller
+ */ 
 export const deleteIPs = async (req: Request, res: Response) => {
     try {
         const { values, mode } = req.body;
@@ -73,7 +77,9 @@ export const deleteIPs = async (req: Request, res: Response) => {
     }
 };
 
-// [POST] api/firewall/url endpoint controller
+/** 
+ * [POST] api/firewall/url endpoint controller
+ */
 export const addDomains = async (req: Request, res: Response) => {
     try {
         const { values, mode } = req.body;
@@ -111,7 +117,9 @@ export const addDomains = async (req: Request, res: Response) => {
     }
 };
 
-// [DELETE] api/firewall/url endpint controller 
+/** 
+ * [DELETE] api/firewall/url endpint controller
+ */ 
 export const deleteDomains = async (req: Request, res: Response) => {
     try {
         const { values, mode } = req.body;
@@ -141,7 +149,9 @@ export const deleteDomains = async (req: Request, res: Response) => {
     }
 };
 
-// [POST] api/firewall/port endpoint controller
+/** 
+ * [POST] api/firewall/port endpoint controller
+ */
 export const addPorts = async (req: Request, res: Response) => {
     try {
         const { values, mode } = req.body;
@@ -179,7 +189,9 @@ export const addPorts = async (req: Request, res: Response) => {
     }
 };
 
-// [DELETE] api/firewall/port endpint controller 
+/** 
+ * [DELETE] api/firewall/port endpint controller
+ */ 
 export const deletePorts = async (req: Request, res: Response) => {
     try {
         const { values, mode } = req.body;
@@ -209,7 +221,9 @@ export const deletePorts = async (req: Request, res: Response) => {
     }
 };
 
-// [GET] api/firewall/rules endpoint controller
+/** 
+ * [GET] api/firewall/rules endpoint controller
+ */
 export const getRules = async (req: Request, res: Response) => {
     try {
         const result = await pool.query<FirewallRule>(
@@ -245,7 +259,9 @@ export const getRules = async (req: Request, res: Response) => {
     }
 };
 
-// [UPDATE] api/firewall/rules endpoint controller
+/**
+ * [UPDATE] api/firewall/rules endpoint controller
+ */
 export const updateRules = async (req: Request, res: Response) => {
     const body: FirewallRulesRequest = req.body;
     const updated: any[] = [];

@@ -18,6 +18,7 @@ async function bootstrap() {
     process.exit(1);
   }
 
+  // create express app
   const app = express();
   app.use(express.json());
 

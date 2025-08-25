@@ -1,5 +1,8 @@
 import { RuleMode } from "../types/ruleMode";
 
+/**
+ * Interface represents the update rules request body
+ */
 export interface FirewallRulesRequest {
     ips?: {
         ids: number[];

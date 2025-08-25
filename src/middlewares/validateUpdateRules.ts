@@ -1,6 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { FirewallRulesRequest } from "../models/firewallRulesRequest";
 
+/**
+ * Middleware for update firewall rules request body validation
+ */
 export default function validateUpdateRules(
   req: Request<{}, {}, FirewallRulesRequest>,
   res: Response,

@@ -2,7 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import { FirewallRequestBody } from "../models/firewallRequestBody";
 import { RuleType } from "../types/ruleType";
 
-// midlleware for rule request body validation
+/**
+ * Midlleware for add/delete rule request body validation
+ */
 export function validateFirewallRule(type: RuleType) {
   return (req: Request<{}, {}, FirewallRequestBody>, res: Response, next: NextFunction) => {
     const { values, mode } = req.body;
