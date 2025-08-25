@@ -1,9 +1,11 @@
 import { Request, Response } from 'express';
-import pool from '../config/db';
-import { FirewallRule } from "../models/firewallRule"
+import { db } from '../config/db';
+import { firewallRulesSchema } from "../config/firewallRulesSchema";
 import { RuleMode } from '../types/ruleMode';
 import { FirewallRulesResponse } from '../models/firewallRulesResponse';
 import { FirewallRulesRequest } from '../models/firewallRulesRequest';
+import { RuleType } from '../types/ruleType';
+import { inArray, and, eq } from 'drizzle-orm';
 
 /**
  * [POST] api/firewall/ip endpoint controller
@@ -16,28 +18,21 @@ export const addIPs = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Invalid request body' });
         }
 
-        // TODO: add validations for IP values and mode!
-
         // insert all IPs to the DB
-        const queryValues: string[] = [];
-        const params: any[] = [];
-        values.forEach((ip: string, i: number) => {
-            params.push(ip, mode, true);
-            queryValues.push(`($${i * 3 + 1}, 'ip', $${i * 3 + 2}, $${i * 3 + 3})`);
-        });
+        await db.insert(firewallRulesSchema).values(
+            values.map((ip: string) => ({
+                value: ip,
+                ruleType: RuleType.IP,
+                ruleMode: mode,
+                active: true,
+            }))
+        );
 
-        if (queryValues.length > 0) {
-            await pool.query(`
-        INSERT INTO firewall_rules (value, rule_type, rule_mode, active)
-        VALUES ${queryValues.join(', ')}
-      `, params);
-        }
-        
         res.status(201).json({
-            type: 'ip',
+            type: RuleType.IP,
             mode,
             values,
-            status: 'success'
+            status: "sucess",
         });
     } catch (err) {
         console.log(err);
@@ -56,17 +51,18 @@ export const deleteIPs = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Invalid request body" });
         }
 
-        // TODO: add validations for IP values and mode!
-
         // Delete matching IP rules
-        await pool.query(
-            `DELETE FROM firewall_rules
-       WHERE rule_type = 'ip' AND rule_mode = $1 AND value = ANY($2::text[])`,
-            [mode, values]
+        await db.delete(firewallRulesSchema)
+        .where(
+            and(
+                eq(firewallRulesSchema.ruleType, RuleType.IP),
+                eq(firewallRulesSchema.ruleMode, mode),
+                inArray(firewallRulesSchema.value, values)
+            )
         );
 
         return res.json({
-            type: "ip",
+            type: RuleType.IP,
             mode,
             values,
             status: "success",
@@ -88,28 +84,21 @@ export const addDomains = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Invalid request body' });
         }
 
-        // TODO: add validations for domains values and mode!
-
         // insert all domains to the DB
-        const queryValues: string[] = [];
-        const params: any[] = [];
-        values.forEach((url: string, i: number) => {
-            params.push(url, mode, true);
-            queryValues.push(`($${i * 3 + 1}, 'url', $${i * 3 + 2}, $${i * 3 + 3})`);
-        });
+        await db.insert(firewallRulesSchema).values(
+            values.map((url: string) => ({
+                value: url,
+                ruleType: RuleType.URL,
+                ruleMode: mode,
+                active: true,
+            }))
+        );
 
-        if (queryValues.length > 0) {
-            await pool.query(`
-        INSERT INTO firewall_rules (value, rule_type, rule_mode, active)
-        VALUES ${queryValues.join(', ')}
-      `, params);
-        }
-        
         res.status(201).json({
-            type: 'url',
+            type: RuleType.URL,
             mode,
             values,
-            status: 'success'
+            status: "sucess",
         });
     } catch (err) {
         console.log(err);
@@ -128,17 +117,18 @@ export const deleteDomains = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Invalid request body" });
         }
 
-        // TODO: add validations for domains values and mode!
-
         // Delete matching domains rules
-        await pool.query(
-            `DELETE FROM firewall_rules
-       WHERE rule_type = 'url' AND rule_mode = $1 AND value = ANY($2::text[])`,
-            [mode, values]
+        await db.delete(firewallRulesSchema)
+        .where(
+            and(
+                eq(firewallRulesSchema.ruleType, RuleType.URL),
+                eq(firewallRulesSchema.ruleMode, mode),
+                inArray(firewallRulesSchema.value, values)
+            )
         );
 
         return res.json({
-            type: "url",
+            type: RuleType.URL,
             mode,
             values,
             status: "success",
@@ -160,28 +150,21 @@ export const addPorts = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Invalid request body' });
         }
 
-        // TODO: add validations for port values and mode!
-
         // insert all ports to the DB
-        const queryValues: string[] = [];
-        const params: any[] = [];
-        values.forEach((port: string, i: number) => {
-            params.push(port, mode, true);
-            queryValues.push(`($${i * 3 + 1}, 'port', $${i * 3 + 2}, $${i * 3 + 3})`);
-        });
+        await db.insert(firewallRulesSchema).values(
+            values.map((port: string) => ({
+                value: port,
+                ruleType: RuleType.PORT,
+                ruleMode: mode,
+                active: true,
+            }))
+        );
 
-        if (queryValues.length > 0) {
-            await pool.query(`
-        INSERT INTO firewall_rules (value, rule_type, rule_mode, active)
-        VALUES ${queryValues.join(', ')}
-      `, params);
-        }
-        
         res.status(201).json({
-            type: 'port',
+            type: RuleType.PORT,
             mode,
             values,
-            status: 'success'
+            status: "sucess",
         });
     } catch (err) {
         console.log(err);
@@ -200,17 +183,18 @@ export const deletePorts = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Invalid request body" });
         }
 
-        // TODO: add validations for port values and mode!
-
         // Delete matching port rules
-        await pool.query(
-            `DELETE FROM firewall_rules
-       WHERE rule_type = 'port' AND rule_mode = $1 AND value = ANY($2::text[])`,
-            [mode, values]
+        await db.delete(firewallRulesSchema)
+        .where(
+            and(
+                eq(firewallRulesSchema.ruleType, RuleType.PORT),
+                eq(firewallRulesSchema.ruleMode, mode),
+                inArray(firewallRulesSchema.value, values)
+            )
         );
 
         return res.json({
-            type: "port",
+            type: RuleType.PORT,
             mode,
             values,
             status: "success",
@@ -226,9 +210,14 @@ export const deletePorts = async (req: Request, res: Response) => {
  */
 export const getRules = async (req: Request, res: Response) => {
     try {
-        const result = await pool.query<FirewallRule>(
-             `SELECT id, rule_type AS type, rule_mode AS mode, value FROM firewall_rules`
-        );
+        const rows = await db
+        .select({
+            id: firewallRulesSchema.id,
+            type: firewallRulesSchema.ruleType,
+            mode: firewallRulesSchema.ruleMode,
+            value: firewallRulesSchema.value,
+        })
+        .from(firewallRulesSchema);
 
         const response: FirewallRulesResponse = {
             ips: { blacklist: [], whitelist: [] },
@@ -236,14 +225,15 @@ export const getRules = async (req: Request, res: Response) => {
             ports: { blacklist: [], whitelist: [] },
         };
 
-        result.rows.forEach((row) => {
+
+        rows.forEach((row) => {
             const mode = row.mode as RuleMode;
 
-            if (row.type === "ip") {
+            if (row.type === RuleType.IP) {
                 response.ips[mode].push({ id: row.id, value: row.value });
-            } else if (row.type === "url") {
+            } else if (row.type === RuleType.URL) {
                 response.urls[mode].push({ id: row.id, value: row.value });
-            } else if (row.type === "port") {
+            } else if (row.type === RuleType.PORT) {
                 response.ports[mode].push({
                     id: row.id,
                     value: row.value,
@@ -252,7 +242,6 @@ export const getRules = async (req: Request, res: Response) => {
         });
 
         return res.json(response);
-    
     } catch (err) {
         console.log(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -265,6 +254,7 @@ export const getRules = async (req: Request, res: Response) => {
 export const updateRules = async (req: Request, res: Response) => {
     const body: FirewallRulesRequest = req.body;
     const updated: any[] = [];
+
     try {
         // Iterate over rule types
         for (const type of ["ips", "urls", "ports"] as const) {
@@ -277,15 +267,23 @@ export const updateRules = async (req: Request, res: Response) => {
             if (!ids || ids.length === 0) continue;
 
             // Update rules in DB
-            const result = await pool.query<FirewallRule>(
-                `UPDATE firewall_rules
-                SET active = $1
-                WHERE id = ANY($2) AND rule_type = $3 AND rule_mode = $4
-                RETURNING id, value, active`,
-                [active, ids, type.slice(0, -1), mode]
-            );
+            const result = await db
+            .update(firewallRulesSchema)
+            .set({ active })
+            .where(
+                and(
+                    inArray(firewallRulesSchema.id, ids),
+                    eq(firewallRulesSchema.ruleType, type.slice(0, -1)),
+                    eq(firewallRulesSchema.ruleMode, mode)
+                )
+            )
+            .returning({
+                id: firewallRulesSchema.id,
+                value: firewallRulesSchema.value,
+                active: firewallRulesSchema.active,
+            });
 
-            updated.push(...result.rows);
+            updated.push(...result);
         }
 
         res.json({ updated });

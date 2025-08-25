@@ -1,6 +1,7 @@
 import { env } from "./env";
 import { Pool } from 'pg';
 import { logger } from "./logger";
+import { drizzle } from "drizzle-orm/node-postgres";
 
 // create postgres connection pool
 const pool = new Pool({
@@ -37,5 +38,5 @@ export const initDB = async () => {
   `);
 }; 
 
-// export the connection pool
-export default pool;
+// export the connection drizzle
+export const db = drizzle(pool);
