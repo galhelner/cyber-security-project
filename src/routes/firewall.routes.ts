@@ -16,10 +16,10 @@ router.post("/url", firewallController.addDomains);
 router.delete("/url", firewallController.deleteDomains);
 
 // [POST] api/firewall/port
-router.post("/url", firewallController.addPorts);
+router.post("/port", firewallController.addPorts);
 
-// [DELETE] api/firewall/url
-router.delete("/url", firewallController.deletePorts);
+// [DELETE] api/firewall/port
+router.delete("/port", firewallController.deletePorts);
 
 // [GET] api/firewall/rules
 router.get("/rules", firewallController.getRules);
