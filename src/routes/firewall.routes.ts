@@ -1,25 +1,27 @@
 import { Router } from "express";
 import * as firewallController from "../controllers/firewall.controller";
+import { validateFirewallRule } from "../middlewares/validateFirewallRule";
+import { RuleType } from "../types/ruleType";
 
 const router = Router();
 
 // [POST] api/firewall/ip endpoint
-router.post("/ip", firewallController.addIPs);
+router.post("/ip", validateFirewallRule(RuleType.IP), firewallController.addIPs);
 
 // [DELETE] api/firewall/ip endpoint
-router.delete("/ip", firewallController.deleteIPs);
+router.delete("/ip", validateFirewallRule(RuleType.IP), firewallController.deleteIPs);
 
 // [POST] api/firewall/url
-router.post("/url", firewallController.addDomains);
+router.post("/url", validateFirewallRule(RuleType.URL), firewallController.addDomains);
 
 // [DELETE] api/firewall/url
-router.delete("/url", firewallController.deleteDomains);
+router.delete("/url", validateFirewallRule(RuleType.URL), firewallController.deleteDomains);
 
 // [POST] api/firewall/port
-router.post("/port", firewallController.addPorts);
+router.post("/port", validateFirewallRule(RuleType.PORT), firewallController.addPorts);
 
 // [DELETE] api/firewall/port
-router.delete("/port", firewallController.deletePorts);
+router.delete("/port", validateFirewallRule(RuleType.PORT), firewallController.deletePorts);
 
 // [GET] api/firewall/rules
 router.get("/rules", firewallController.getRules);
