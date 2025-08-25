@@ -1,14 +1,28 @@
 import { env } from "./env";
 import { Pool } from 'pg';
+import { logger } from "./logger";
 
-// exports postgres connection pool
-export const pool = new Pool({
-  host: env.DB.HOST,
-  user: env.DB.USER,
-  password: env.DB.PASSWORD,
-  database: env.DB.NAME,
-  port: Number(env.DB.PORT),
+// create postgres connection pool
+const pool = new Pool({
+  connectionString: env.DB.URL
 });
+
+// set retry interval
+const retryInterval = Number(env.DB.CONNECTION_INTERVAL) || 5000;
+
+// Stop and wait connection function
+export async function connectWithRetry(): Promise<void> {
+  try {
+    // trying a simple query to check connection (some king of ping)
+    await pool.query(`SELECT 1`);
+    logger.info("✅ Database connected successfully");
+  } catch (err) {
+    logger.error("❌ Database connection failed. Retrying...", err);
+
+    // wait and try again
+    setTimeout(connectWithRetry, retryInterval);
+  }
+}
 
 // DB initialization function
 export const initDB = async () => {
@@ -21,5 +35,7 @@ export const initDB = async () => {
         active BOOLEAN DEFAULT TRUE
       );
   `);
-};
+}; 
 
+// export the connection pool
+export default pool;

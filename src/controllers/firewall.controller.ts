@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { pool } from '../config/db';
+import pool from '../config/db';
 import { FirewallRule } from "../models/firewallRule"
 import { RuleMode } from '../types/ruleMode';
 import { FirewallRulesResponse } from '../models/firewallRulesResponse';

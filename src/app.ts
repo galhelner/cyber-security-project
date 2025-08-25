@@ -1,17 +1,19 @@
+import { logger } from "./config/logger";
 import { env } from "./config/env";
 import express from 'express';
 import firewallRoutes from "./routes/firewall.routes";
-import { initDB } from "./config/db";
+import { initDB, connectWithRetry } from "./config/db";
 
 
 // server bootstrap function definition
 async function bootstrap() {
   try {
-    // create the DB tables
+    // connect to the DB and create tables
+    await connectWithRetry();
     await initDB();
-    console.log('Database initialized');
+    logger.info("✅ DB tables created");
   } catch (err) {
-    console.log('Failed to initialize database', err);
+    logger.error('❌ Failed to initialize database', err);
     process.exit(1);
   }
 
@@ -26,7 +28,7 @@ async function bootstrap() {
 
   // running the express server
   app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    logger.info(`Server running on http://localhost:${PORT}`);
   });
 }
 
