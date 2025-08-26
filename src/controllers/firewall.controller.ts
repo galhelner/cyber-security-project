@@ -32,7 +32,7 @@ export const addIPs = async (req: Request, res: Response) => {
             type: RuleType.IP,
             mode,
             values,
-            status: "sucess",
+            status: "success",
         });
     } catch (err) {
         console.log(err);
@@ -98,7 +98,7 @@ export const addDomains = async (req: Request, res: Response) => {
             type: RuleType.URL,
             mode,
             values,
-            status: "sucess",
+            status: "success",
         });
     } catch (err) {
         console.log(err);
@@ -164,7 +164,7 @@ export const addPorts = async (req: Request, res: Response) => {
             type: RuleType.PORT,
             mode,
             values,
-            status: "sucess",
+            status: "success",
         });
     } catch (err) {
         console.log(err);
