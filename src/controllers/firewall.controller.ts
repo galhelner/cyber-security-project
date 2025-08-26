@@ -6,6 +6,7 @@ import { FirewallRulesResponse } from '../models/firewallRulesResponse';
 import { FirewallRulesRequest } from '../models/firewallRulesRequest';
 import { RuleType } from '../types/ruleType';
 import { inArray, and, eq } from 'drizzle-orm';
+import { logger } from '../config/logger';
 
 /**
  * [POST] api/firewall/ip endpoint controller
@@ -35,7 +36,7 @@ export const addIPs = async (req: Request, res: Response) => {
             status: "success",
         });
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -68,7 +69,7 @@ export const deleteIPs = async (req: Request, res: Response) => {
             status: "success",
         });
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -101,7 +102,7 @@ export const addDomains = async (req: Request, res: Response) => {
             status: "success",
         });
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -134,7 +135,7 @@ export const deleteDomains = async (req: Request, res: Response) => {
             status: "success",
         });
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -167,7 +168,7 @@ export const addPorts = async (req: Request, res: Response) => {
             status: "success",
         });
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -200,7 +201,7 @@ export const deletePorts = async (req: Request, res: Response) => {
             status: "success",
         });
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -243,7 +244,7 @@ export const getRules = async (req: Request, res: Response) => {
 
         return res.json(response);
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };
@@ -288,7 +289,7 @@ export const updateRules = async (req: Request, res: Response) => {
 
         res.json({ updated });
     } catch (err) {
-        console.log(err);
+        logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
     }
 };

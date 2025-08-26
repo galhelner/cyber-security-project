@@ -2,13 +2,14 @@ import { logger } from "./config/logger";
 import { env } from "./config/env";
 import express from 'express';
 import firewallRoutes from "./routes/firewall.routes";
-import { connectWithRetry } from "./config/db";
+import { connectWithRetry, initDB } from "./config/db";
 
 
 // server bootstrap function definition
 async function bootstrap() {
   // connect to the DB
   await connectWithRetry();
+  await initDB();
 
   // create express app
   const app = express();
