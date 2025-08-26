@@ -6,7 +6,9 @@ import { FirewallRulesResponse } from '../models/firewallRulesResponse';
 import { FirewallRulesRequest } from '../models/firewallRulesRequest';
 import { RuleType } from '../types/ruleType';
 import { inArray, and, eq } from 'drizzle-orm';
-import { logger } from '../config/logger';
+import { Logger } from '../config/logger';
+
+const logger = Logger.getInstance();
 
 /**
  * [POST] api/firewall/ip endpoint controller

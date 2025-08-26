@@ -1,9 +1,10 @@
-import { logger } from "./config/logger";
+import { Logger } from "./config/logger";
 import { env } from "./config/env";
 import express from 'express';
 import firewallRoutes from "./routes/firewall.routes";
 import { connectWithRetry, initDB } from "./config/db";
 
+const logger = Logger.getInstance();
 
 // server bootstrap function definition
 async function bootstrap() {

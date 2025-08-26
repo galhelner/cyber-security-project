@@ -1,7 +1,9 @@
 import { env } from "./env";
 import { Pool } from 'pg';
-import { logger } from "./logger";
+import { Logger } from "./logger";
 import { drizzle } from "drizzle-orm/node-postgres";
+
+const logger = Logger.getInstance();
 
 // create postgres connection pool
 const pool = new Pool({
