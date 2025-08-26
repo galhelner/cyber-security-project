@@ -1,21 +1,22 @@
 import { env } from "./env";
 import { Pool } from 'pg';
 import { logger } from "./logger";
+import { drizzle } from "drizzle-orm/node-postgres";
 
 // create postgres connection pool
 const pool = new Pool({
-  connectionString: env.DB.URL
+  connectionString: env.DATABASE_URL
 });
 
 // set retry interval
-const retryInterval = Number(env.DB.CONNECTION_INTERVAL) || 5000;
+const retryInterval = Number(env.DB_CONNECTION_INTERVAL) || 5000;
 
 // Stop and wait connection function
 export async function connectWithRetry(): Promise<void> {
   try {
     // trying a simple query to check connection (some king of ping)
     await pool.query(`SELECT 1`);
-    logger.info("✅ Database connected successfully");
+    logger.info(`✅ Database connected successfully in ${env.ENV} mode`);
   } catch (err) {
     logger.error("❌ Database connection failed. Retrying...", err);
 
@@ -37,5 +38,5 @@ export const initDB = async () => {
   `);
 }; 
 
-// export the connection pool
-export default pool;
+// export the connection drizzle
+export const db = drizzle(pool);

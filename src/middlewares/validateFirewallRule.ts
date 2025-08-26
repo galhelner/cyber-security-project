@@ -21,19 +21,19 @@ export function validateFirewallRule(type: RuleType) {
     // Validate each value based on type
     for (const value of values) {
       switch (type) {
-        case "ip":
+        case RuleType.IP:
           if (typeof value !== "string" || !isValidIP(value)) {
             return res.status(400).json({ error: `Invalid IP: ${value}` });
           }
           break;
 
-        case "url":
+        case RuleType.URL:
           if (typeof value !== "string" || !isValidURL(value)) {
             return res.status(400).json({ error: `Invalid URL: ${value}` });
           }
           break;
 
-        case "port":
+        case RuleType.PORT:
           if (!isValidPort(value)) {
             return res.status(400).json({ error: `Invalid port: ${value}` });
           }
