@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { db } from '../config/db';
+import { Database } from '../config/db';
 import { firewallRulesSchema } from "../config/firewallRulesSchema";
 import { RuleMode } from '../types/ruleMode';
 import { FirewallRulesResponse } from '../models/firewallRulesResponse';
@@ -9,6 +9,8 @@ import { inArray, and, eq } from 'drizzle-orm';
 import { Logger } from '../config/logger';
 
 const logger = Logger.getInstance();
+const database = Database.getInstance();
+const db = database.getDrizzleDB();
 
 /**
  * [POST] api/firewall/ip endpoint controller

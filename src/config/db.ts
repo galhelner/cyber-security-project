@@ -1,44 +1,61 @@
 import { env } from "./env";
-import { Pool } from 'pg';
-import { Logger } from "./logger";
+import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
+import { Logger } from "./logger";
 
 const logger = Logger.getInstance();
 
-// create postgres connection pool
-const pool = new Pool({
-  connectionString: env.DATABASE_URL
-});
+class Database {
+  private static instance: Database;
+  private pool: Pool;
+  private drizzleDB: ReturnType<typeof drizzle>;
+  private retryInterval: number;
 
-// set retry interval
-const retryInterval = Number(env.DB_CONNECTION_INTERVAL) || 5000;
-
-// Stop and wait connection function
-export async function connectWithRetry(): Promise<void> {
-  try {
-    // trying a simple query to check connection (some king of ping)
-    await pool.query(`SELECT 1`);
-    logger.info(`✅ Database connected successfully in ${env.ENV} mode`);
-  } catch (err) {
-    logger.error("❌ Database connection failed. Retrying...", err);
-
-    // wait and try again
-    setTimeout(connectWithRetry, retryInterval);
+  private constructor() {
+    this.pool = new Pool({ connectionString: env.DATABASE_URL });
+    this.drizzleDB = drizzle(this.pool);
+    this.retryInterval = Number(env.DB_CONNECTION_INTERVAL) || 5000;
   }
-}
 
-// DB initialization function
-export const initDB = async () => {
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS firewall_rules (
+  public static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
+    }
+    return Database.instance;
+  }
+
+  public getPool(): Pool {
+    return this.pool;
+  }
+
+  public getDrizzleDB() {
+    return this.drizzleDB;
+  }
+
+  public async connectWithRetry(): Promise<void> {
+    try {
+      await this.pool.query("SELECT 1");
+      logger.info(`✅ Database connected successfully in ${env.ENV} mode`);
+    } catch (err) {
+      logger.error("❌ Database connection failed. Retrying...", err);
+      setTimeout(() => this.connectWithRetry(), this.retryInterval);
+    }
+  }
+
+  public async initDB(): Promise<void> {
+    await this.pool.query(`
+      CREATE TABLE IF NOT EXISTS firewall_rules (
         id SERIAL PRIMARY KEY,
         value TEXT NOT NULL,
         rule_type TEXT NOT NULL,
         rule_mode TEXT NOT NULL,
         active BOOLEAN DEFAULT TRUE
       );
-  `);
-}; 
+    `);
+  }
+}
 
-// export the connection drizzle
-export const db = drizzle(pool);
+// export drizzle instance for queries
+const database = Database.getInstance();
+export const db = database.getDrizzleDB();
+export { Database };
