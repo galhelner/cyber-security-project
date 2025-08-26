@@ -22,7 +22,7 @@ async function bootstrap() {
 
   // running the express server
   app.listen(PORT, () => {
-    logger.info(`Server running on http://localhost:${PORT}`);
+    logger.info(`Server running on http://localhost:${PORT} in ${env.ENV} mode`);
   });
 }
 

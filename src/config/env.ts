@@ -1,10 +1,9 @@
 import { z } from "zod";
 import dotenv from "dotenv";
 
-// load .env file into process.env in dev mode
-if (process.env.ENV !== "prod") {
-  dotenv.config();
-}
+// load .env file depend on ENV
+const nodeEnv = process.env.ENV || "dev";
+dotenv.config({ path: `.env.${nodeEnv}` });
 
 const envSchema = z.object({
   ENV: z.enum(["dev", "prod"]),
@@ -13,7 +12,7 @@ const envSchema = z.object({
   .min(1, "Port must be at least 1")
   .max(65535, "Port cannot be greater than 65535")
   .default(3000),
-  DB_CONNECTION_INTERVAL: z.number().default(5000),
+  DB_CONNECTION_INTERVAL: z.coerce.number().default(5000),
   DATABASE_URL: z.string().refine((val) => {
     try {
       new URL(val);
