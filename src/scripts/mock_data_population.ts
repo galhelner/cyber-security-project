@@ -1,18 +1,13 @@
 // scripts/mock_data_population.ts
 import { faker } from '@faker-js/faker';
-import { drizzle } from 'drizzle-orm/node-postgres';
-import { Pool } from 'pg';
 import { firewallRulesSchema } from '../config/firewallRulesSchema';
 import { RuleType } from '../types/ruleType';
 import { RuleMode } from '../types/ruleMode';
-import { env } from "../config/env";
+import { Database } from '../config/db';
 
-// PostgreSQL connection pool
-const pool = new Pool({
-  connectionString: env.DATABASE_URL
-});
-
-const db = drizzle(pool);
+const dbInstance = Database.getInstance();
+const pool = dbInstance.getPool();
+const db = dbInstance.getDrizzleDB();
 
 // Edge-case and random values
 const ipEdges = ['0.0.0.0', '255.255.255.255', '127.0.0.1'];
@@ -45,6 +40,8 @@ function generateValue(type: RuleType, index: number): string {
 
 // Generate rules with full coverage
 export async function populateFirewallRules() {
+  await dbInstance.initDB();
+
   const types: RuleType[] = [RuleType.IP, RuleType.URL, RuleType.PORT];
   const modes: RuleMode[] = [RuleMode.BLACKLIST, RuleMode.WHITELIST];
 
