@@ -3,7 +3,7 @@ import { env } from './config/env';
 import { Logger } from './config/logger';
 
 const logger = Logger.getInstance();
-const PORT = env.PORT || 3000;
+const PORT = env.PORT || 5000;
 
 async function startServer() {
     const app = await createApp();
