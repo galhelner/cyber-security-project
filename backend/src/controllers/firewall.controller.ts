@@ -1,12 +1,16 @@
 import { Request, Response } from 'express';
-import { db } from '../config/db';
+import { Database } from '../config/db';
 import { firewallRulesSchema } from "../config/firewallRulesSchema";
 import { RuleMode } from '../types/ruleMode';
 import { FirewallRulesResponse } from '../models/firewallRulesResponse';
 import { FirewallRulesRequest } from '../models/firewallRulesRequest';
 import { RuleType } from '../types/ruleType';
 import { inArray, and, eq } from 'drizzle-orm';
-import { logger } from '../config/logger';
+import { Logger } from '../config/logger';
+
+const logger = Logger.getInstance();
+const database = Database.getInstance();
+const db = database.getDrizzleDB();
 
 /**
  * [POST] api/firewall/ip endpoint controller
@@ -17,6 +21,23 @@ export const addIPs = async (req: Request, res: Response) => {
 
         if (!Array.isArray(values) || values.length === 0 || !mode) {
             return res.status(400).json({ error: 'Invalid request body' });
+        }
+
+        // check if the given values already exists in DB
+        const existing = await db
+            .select({ value: firewallRulesSchema.value })
+            .from(firewallRulesSchema)
+            .where(
+                inArray(firewallRulesSchema.value, values)
+            );
+
+        const existingIPs = existing.map((row) => row.value);
+
+        if (existingIPs.length > 0) {
+            return res.status(409).json({
+                error: "Some IPs already exist",
+                duplicates: existingIPs,
+            });
         }
 
         // insert all IPs to the DB
@@ -52,6 +73,25 @@ export const deleteIPs = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Invalid request body" });
         }
 
+        // Check which of the IPs exist
+        const existing = await db
+            .select({ value: firewallRulesSchema.value })
+            .from(firewallRulesSchema)
+            .where(
+                and(
+                    eq(firewallRulesSchema.ruleType, RuleType.IP),
+                    eq(firewallRulesSchema.ruleMode, mode),
+                    inArray(firewallRulesSchema.value, values)
+                )
+            );
+
+        if (existing.length !== values.length) {
+            return res.status(404).json({
+                error: "Some IPs do not exist",
+                missing: values.filter(v => !existing.map(e => e.value).includes(v))
+            });
+        }
+
         // Delete matching IP rules
         await db.delete(firewallRulesSchema)
         .where(
@@ -83,6 +123,23 @@ export const addDomains = async (req: Request, res: Response) => {
 
         if (!Array.isArray(values) || values.length === 0 || !mode) {
             return res.status(400).json({ error: 'Invalid request body' });
+        }
+
+        // check if the given values already exists in DB
+        const existing = await db
+            .select({ value: firewallRulesSchema.value })
+            .from(firewallRulesSchema)
+            .where(
+                inArray(firewallRulesSchema.value, values)
+            );
+
+        const existingURLs = existing.map((row) => row.value);
+
+        if (existingURLs.length > 0) {
+            return res.status(409).json({
+                error: "Some URLs already exist",
+                duplicates: existingURLs,
+            });
         }
 
         // insert all domains to the DB
@@ -118,6 +175,25 @@ export const deleteDomains = async (req: Request, res: Response) => {
             return res.status(400).json({ error: "Invalid request body" });
         }
 
+        // Check which of the URLs exist
+        const existing = await db
+            .select({ value: firewallRulesSchema.value })
+            .from(firewallRulesSchema)
+            .where(
+                and(
+                    eq(firewallRulesSchema.ruleType, RuleType.URL),
+                    eq(firewallRulesSchema.ruleMode, mode),
+                    inArray(firewallRulesSchema.value, values)
+                )
+            );
+
+        if (existing.length !== values.length) {
+            return res.status(404).json({
+                error: "Some URLs do not exist",
+                missing: values.filter(v => !existing.map(e => e.value).includes(v))
+            });
+        }
+
         // Delete matching domains rules
         await db.delete(firewallRulesSchema)
         .where(
@@ -151,6 +227,23 @@ export const addPorts = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Invalid request body' });
         }
 
+        // check if the given values already exists in DB
+        const existing = await db
+            .select({ value: firewallRulesSchema.value })
+            .from(firewallRulesSchema)
+            .where(
+                inArray(firewallRulesSchema.value, values)
+            );
+
+        const existingPorts = existing.map((row) => row.value);
+
+        if (existingPorts.length > 0) {
+            return res.status(409).json({
+                error: "Some ports already exist",
+                duplicates: existingPorts,
+            });
+        }
+
         // insert all ports to the DB
         await db.insert(firewallRulesSchema).values(
             values.map((port: string) => ({
@@ -182,6 +275,25 @@ export const deletePorts = async (req: Request, res: Response) => {
 
         if (!Array.isArray(values) || values.length === 0 || !mode) {
             return res.status(400).json({ error: "Invalid request body" });
+        }
+
+        // Check which of the ports exist
+        const existing = await db
+            .select({ value: firewallRulesSchema.value })
+            .from(firewallRulesSchema)
+            .where(
+                and(
+                    eq(firewallRulesSchema.ruleType, RuleType.PORT),
+                    eq(firewallRulesSchema.ruleMode, mode),
+                    inArray(firewallRulesSchema.value, values)
+                )
+            );
+
+        if (existing.length !== values.length) {
+            return res.status(404).json({
+                error: "Some ports do not exist",
+                missing: values.filter(v => !existing.map(e => e.value).includes(v))
+            });
         }
 
         // Delete matching port rules
