@@ -44,31 +44,66 @@ export default function RulesAddition({ onAdd }: RulesAdditionProps) {
   };
 
   return (
-    <div className="bg-white p-6 rounded shadow-md space-y-4">
-      <h2 className="text-xl font-bold">Add New Firewall Rule</h2>
-      <div className="flex flex-col md:flex-row gap-4 items-start">
-        <div>
-          <label className="block mb-1 font-semibold">Type</label>
-          <select value={type} onChange={(e) => setType(e.target.value as RuleType)} className="border rounded px-3 py-1">
+  <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl shadow-xl max-w-4xl w-full mx-auto border border-blue-100">
+      <h2 className="text-3xl font-extrabold text-blue-800 mb-2 tracking-tight text-center drop-shadow-sm">Add New Firewall Rule</h2>
+      <p className="text-gray-500 text-center mb-8">Quickly add a new rule to your firewall. Choose the type, mode, and value.</p>
+
+      <div className="flex flex-col md:flex-row md:space-x-6 space-y-4 md:space-y-0 items-end justify-between">
+        {/* Type */}
+        <div className="flex-1 flex flex-col">
+          <label className="mb-2 font-semibold text-blue-700">Type</label>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value as RuleType)}
+            className="border border-blue-200 bg-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition shadow-sm"
+          >
             <option value="ip">IP</option>
             <option value="port">Port</option>
             <option value="url">URL</option>
           </select>
         </div>
-        <div>
-          <label className="block mb-1 font-semibold">Value</label>
-          <input type="text" placeholder="Enter value" value={value} onChange={(e) => setValue(e.target.value)} className="border rounded px-3 py-1" />
+
+        {/* Value */}
+        <div className="flex-1 flex flex-col">
+          <label className="mb-2 font-semibold text-blue-700">Value</label>
+          <input
+            type="text"
+            placeholder="Enter value"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+            className="border border-blue-200 bg-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition shadow-sm placeholder-gray-400"
+          />
         </div>
-        <div>
-          <label className="block mb-1 font-semibold">Mode</label>
-          <select value={mode} onChange={(e) => setMode(e.target.value as RuleMode)} className="border rounded px-3 py-1">
+
+        {/* Mode */}
+        <div className="flex-1 flex flex-col">
+          <label className="mb-2 font-semibold text-blue-700">Mode</label>
+          <select
+            value={mode}
+            onChange={(e) => setMode(e.target.value as RuleMode)}
+            className="border border-blue-200 bg-white rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 transition shadow-sm"
+          >
             <option value="whitelist">Whitelist</option>
             <option value="blacklist">Blacklist</option>
           </select>
         </div>
-        <div className="mt-4 md:mt-0">
-          <button onClick={handleAdd} disabled={loading} className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">
-            {loading ? "Adding..." : "Add Rule"}
+
+        {/* Add Button */}
+        <div className="flex md:justify-end mt-4 md:mt-0">
+          <button
+            onClick={handleAdd}
+            disabled={loading}
+            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold px-8 py-2 rounded-lg shadow-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-blue-400"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z"></path>
+                </svg>
+                Adding...
+              </span>
+            ) : "Add Rule"}
           </button>
         </div>
       </div>
