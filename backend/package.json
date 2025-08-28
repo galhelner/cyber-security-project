@@ -2,9 +2,9 @@
   "name": "code",
   "version": "1.0.0",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "start": "node dist/app.js",
+    "start": "node dist/server.js",
     "dev": "nodemon --watch src --exec tsx src/server.ts",
     "build": "tsc -p .",
     "test": "jest",
