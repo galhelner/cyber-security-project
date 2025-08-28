@@ -5,5 +5,5 @@ export const firewallRulesSchema = pgTable("firewall_rules", {
   value: text("value").notNull(),
   ruleType: text("rule_type").notNull(),
   ruleMode: text("rule_mode").notNull(),
-  active: boolean("active").default(true),
+  active: boolean("active").notNull().default(true),
 });

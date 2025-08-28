@@ -329,6 +329,7 @@ export const getRules = async (req: Request, res: Response) => {
             type: firewallRulesSchema.ruleType,
             mode: firewallRulesSchema.ruleMode,
             value: firewallRulesSchema.value,
+            active: firewallRulesSchema.active
         })
         .from(firewallRulesSchema);
 
@@ -343,14 +344,11 @@ export const getRules = async (req: Request, res: Response) => {
             const mode = row.mode as RuleMode;
 
             if (row.type === RuleType.IP) {
-                response.ips[mode].push({ id: row.id, value: row.value });
+                response.ips[mode].push({ id: row.id, value: row.value, active: row.active });
             } else if (row.type === RuleType.URL) {
-                response.urls[mode].push({ id: row.id, value: row.value });
+                response.urls[mode].push({ id: row.id, value: row.value, active: row.active });
             } else if (row.type === RuleType.PORT) {
-                response.ports[mode].push({
-                    id: row.id,
-                    value: row.value,
-                });
+                response.ports[mode].push({ id: row.id, value: row.value, active: row.active });
             }
         });
 
