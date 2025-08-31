@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { env } from "../../config/env";
-import { Logger } from "@/config/logger";
+import { env } from "@/config/env";
 
 const BACKEND_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -51,7 +50,7 @@ export default function ExistingRules() {
 
       setRules(flattened);
     } catch (err: any) {
-      Logger.error(err);
+      console.error(err);
       alert("Failed to fetch rules");
       setRules([]);
     } finally {
@@ -109,7 +108,7 @@ export default function ExistingRules() {
 
     setRules(flattened);
   } catch (err: any) {
-    Logger.error(err);
+    console.error(err);
     alert("Failed to toggle rule");
   }
 };
@@ -138,7 +137,7 @@ export default function ExistingRules() {
       // Remove from local state
       setRules((prev) => prev.filter((r) => r.id !== ruleId));
     } catch (err: any) {
-      Logger.error(err);
+      console.error(err);
       alert("Failed to delete rule");
     }
   };

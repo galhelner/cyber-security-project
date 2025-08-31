@@ -2,7 +2,6 @@ import "./globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "@/components/Footer";
 import { env } from "@/config/env";
-import { Logger } from "@/config/logger";
  
 export default function RootLayout({
   children,
@@ -11,7 +10,7 @@ export default function RootLayout({
 }>) {
 
   // log the backend URL to verify it's being read correctly
-  Logger.info(`Backend URL: ${env.NEXT_PUBLIC_BACKEND_URL}`);
+  console.info(`Backend URL: ${env.NEXT_PUBLIC_BACKEND_URL}`);
 
   return (
     <html lang="en">

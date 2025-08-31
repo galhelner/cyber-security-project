@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { env } from "../../config/env";
-import { Logger } from "@/config/logger";
+import { env } from "@/config/env";
 
 type RuleType = "ip" | "port" | "url";
 type RuleMode = "whitelist" | "blacklist";
@@ -39,7 +38,7 @@ export default function RulesAddition({ onAdd }: RulesAdditionProps) {
       setValue("");
       onAdd?.(); // refresh rules
     } catch (err: any) {
-      Logger.error(err);
+      console.error(err);
       alert(`Error: ${err.message}`);
     } finally {
       setLoading(false);
