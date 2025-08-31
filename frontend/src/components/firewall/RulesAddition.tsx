@@ -34,9 +34,9 @@ export default function RulesAddition({ onAdd }: RulesAdditionProps) {
         throw new Error(errorData.error || "Failed to add rule");
       }
 
-      alert(`${type.toUpperCase()} rule added successfully!`);
-      setValue("");
-      onAdd?.(); // refresh rules
+  alert(`${type.toUpperCase()} rule added successfully!`);
+  setValue("");
+  if (onAdd) onAdd(); // refresh rules
     } catch (err: any) {
       console.error(err);
       alert(`Error: ${err.message}`);

@@ -56,6 +56,8 @@ export const addIPs = async (req: Request, res: Response) => {
             values,
             status: "success",
         });
+
+        logger.info(`Added IPs: ${values.join(", ")} in mode: ${mode}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -101,6 +103,8 @@ export const deleteIPs = async (req: Request, res: Response) => {
                 inArray(firewallRulesSchema.value, values)
             )
         );
+
+        logger.info(`Deleted IPs: ${values.join(", ")} from mode: ${mode}`);
 
         return res.json({
             type: RuleType.IP,
@@ -158,6 +162,8 @@ export const addDomains = async (req: Request, res: Response) => {
             values,
             status: "success",
         });
+
+        logger.info(`Added URLs: ${values.join(", ")} in mode: ${mode}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -203,6 +209,8 @@ export const deleteDomains = async (req: Request, res: Response) => {
                 inArray(firewallRulesSchema.value, values)
             )
         );
+
+        logger.info(`Deleted URLs: ${values.join(", ")} from mode: ${mode}`);
 
         return res.json({
             type: RuleType.URL,
@@ -260,6 +268,8 @@ export const addPorts = async (req: Request, res: Response) => {
             values,
             status: "success",
         });
+
+        logger.info(`Added ports: ${values.join(", ")} in mode: ${mode}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -305,6 +315,8 @@ export const deletePorts = async (req: Request, res: Response) => {
                 inArray(firewallRulesSchema.value, values)
             )
         );
+
+        logger.info(`Deleted ports: ${values.join(", ")} from mode: ${mode}`);
 
         return res.json({
             type: RuleType.PORT,
@@ -398,6 +410,8 @@ export const updateRules = async (req: Request, res: Response) => {
         }
 
         res.json({ updated });
+
+        logger.info(`Updated rules: ${JSON.stringify(updated)}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });

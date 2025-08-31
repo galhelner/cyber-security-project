@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { forwardRef, useImperativeHandle, useEffect, useState } from "react";
 import { env } from "@/config/env";
-
-const BACKEND_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 interface Rule {
   id: string;
@@ -19,7 +17,9 @@ interface FirewallRulesResponse {
   ports: { whitelist: any[]; blacklist: any[] };
 }
 
-export default function ExistingRules() {
+const BACKEND_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
+
+const ExistingRules = forwardRef(function ExistingRules(_, ref) {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -57,6 +57,8 @@ export default function ExistingRules() {
       setLoading(false);
     }
   };
+
+  useImperativeHandle(ref, () => ({ fetchRules }), [fetchRules]);
 
   useEffect(() => {
     fetchRules();
@@ -190,5 +192,8 @@ export default function ExistingRules() {
         </ul>
       )}
     </div>
+
   );
-}
+});
+
+export default ExistingRules;

@@ -11,27 +11,38 @@ class Logger {
 
   public static getInstance(): winston.Logger {
     if (!Logger.instance) {
-      // Define a custom development log format
-      const devFormat = combine(
+
+      // Formats
+      const devConsoleFormat = combine(
         colorize(),
         timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
         printf(({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`)
       );
+      const devFileFormat = combine(
+        timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+        printf(({ level, message, timestamp }) => `[${timestamp}] ${level}: ${message}`)
+      );
+      const prodFileFormat = combine(timestamp(), json());
 
-      // Define a custom production log format
-      const prodFormat = combine(timestamp(), json());
-
-      // Choose transport based on env
-      const transports =
-        env.ENV === "dev"
-          ? [new winston.transports.Console()]
-          : [
-              new winston.transports.File({
-                filename: "logs/app.log",
-                maxsize: 5 * 1024 * 1024, // 5MB
-                maxFiles: 5,
-              }),
-            ];
+      // Transports
+      const transports: winston.transport[] = [];
+      // Always write to file
+      transports.push(
+        new winston.transports.File({
+          filename: "logs/app.log",
+          maxsize: 5 * 1024 * 1024, // 5MB
+          maxFiles: 5,
+          format: env.ENV === "dev" ? devFileFormat : prodFileFormat,
+        })
+      );
+      // In dev, also log to console (with color)
+      if (env.ENV === "dev") {
+        transports.push(
+          new winston.transports.Console({
+            format: devConsoleFormat,
+          })
+        );
+      }
 
       // Set logger level based on env
       const level = env.ENV === "dev" ? "debug" : "info";
@@ -39,7 +50,6 @@ class Logger {
       // Create the singleton logger instance
       Logger.instance = winston.createLogger({
         level,
-        format: env.ENV === "dev" ? devFormat : prodFormat,
         transports,
       });
 
