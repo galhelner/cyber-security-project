@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Logger } from "@/config/logger";
 
 const frontendEnvSchema = z.object({
   NEXT_PUBLIC_BACKEND_URL: z
@@ -16,7 +17,7 @@ const frontendEnvSchema = z.object({
 const parsed = frontendEnvSchema.safeParse(process.env);
 if (!parsed.success) {
   // Log the error and throw to ensure the app fails fast
-  console.error("[env.ts] Environment variable validation failed:", parsed.error);
+  Logger.error("[env.ts] Environment variable validation failed:", parsed.error);
   throw parsed.error;
 }
 export const env = parsed.data;
