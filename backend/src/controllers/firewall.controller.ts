@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { Database } from '../config/db';
-import { firewallRulesSchema } from "../config/firewallRulesSchema";
-import { RuleMode } from '../types/ruleMode';
-import { FirewallRulesResponse } from '../models/firewallRulesResponse';
-import { FirewallRulesRequest } from '../models/firewallRulesRequest';
-import { RuleType } from '../types/ruleType';
+import { Database } from '../config/db.js';
+import { firewallRulesSchema } from "../config/firewallRulesSchema.js";
+import { RuleMode } from '../types/ruleMode.js';
+import { FirewallRulesResponse } from '../models/firewallRulesResponse.js';
+import { FirewallRulesRequest } from '../models/firewallRulesRequest.js';
+import { RuleType } from '../types/ruleType.js';
 import { inArray, and, eq } from 'drizzle-orm';
-import { Logger } from '../config/logger';
+import { Logger } from '../config/logger.js';
 
 const logger = Logger.getInstance();
 const database = Database.getInstance();

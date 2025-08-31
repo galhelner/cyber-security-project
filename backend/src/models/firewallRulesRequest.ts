@@ -1,4 +1,4 @@
-import { RuleMode } from "../types/ruleMode";
+import { RuleMode } from "../types/ruleMode.js";
 
 /**
  * Interface represents the update rules request body

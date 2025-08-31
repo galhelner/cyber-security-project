@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { FirewallRequestBody } from "../models/firewallRequestBody";
-import { RuleType } from "../types/ruleType";
+import { FirewallRequestBody } from "../models/firewallRequestBody.js";
+import { RuleType } from "../types/ruleType.js";
 
 /**
  * Midlleware for add/delete rule request body validation

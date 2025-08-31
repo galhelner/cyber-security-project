@@ -1,9 +1,9 @@
 // scripts/mock_data_population.ts
 import { faker } from '@faker-js/faker';
-import { firewallRulesSchema } from '../config/firewallRulesSchema';
-import { RuleType } from '../types/ruleType';
-import { RuleMode } from '../types/ruleMode';
-import { Database } from '../config/db';
+import { firewallRulesSchema } from '../config/firewallRulesSchema.js';
+import { RuleType } from '../types/ruleType.js';
+import { RuleMode } from '../types/ruleMode.js';
+import { Database } from '../config/db.js';
 
 const dbInstance = Database.getInstance();
 const pool = dbInstance.getPool();

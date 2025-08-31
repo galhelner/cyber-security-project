@@ -1,9 +1,9 @@
 import express, { Express } from 'express';
-import firewallRoutes from './routes/firewall.routes';
-import { Database } from './config/db';
-import { Logger } from './config/logger';
+import firewallRoutes from './routes/firewall.routes.js';
+import { Database } from './config/db.js';
+import { Logger } from './config/logger.js';
 import cors from "cors";
-import { env } from './config/env';
+import { env } from './config/env.js';
 
 const logger = Logger.getInstance();
 

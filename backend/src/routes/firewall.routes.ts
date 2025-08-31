@@ -1,7 +1,7 @@
 import { Router } from "express";
-import * as firewallController from "../controllers/firewall.controller";
-import { validateFirewallRule } from "../middlewares/validateFirewallRule";
-import { RuleType } from "../types/ruleType";
+import * as firewallController from "../controllers/firewall.controller.js";
+import { validateFirewallRule } from "../middlewares/validateFirewallRule.js";
+import { RuleType } from "../types/ruleType.js";
 
 const router = Router();
 
