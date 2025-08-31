@@ -9,7 +9,8 @@ export default function Navbar() {
       {/* Left side: Logo */}
       <div className="flex items-center space-x-4">
         <button className="text-xl font-bold hover:text-blue-400">
-          <Link href="/">MyApp</Link>
+          <img src="/cyber-logo.png" alt="Logo" className="h-8 w-8 inline-block mr-2" />
+          <Link href="/">Cyber Security</Link>
         </button>
       </div>
 

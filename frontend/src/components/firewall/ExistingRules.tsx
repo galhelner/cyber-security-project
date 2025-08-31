@@ -1,6 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { env } from "../../config/env";
+
+const BACKEND_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 
 interface Rule {
   id: string;
@@ -19,9 +22,6 @@ interface FirewallRulesResponse {
 export default function ExistingRules() {
   const [rules, setRules] = useState<Rule[]>([]);
   const [loading, setLoading] = useState(true);
-
-  const BACKEND_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  if (!BACKEND_BASE_URL) throw new Error("NEXT_PUBLIC_BACKEND_URL is not defined");
 
   // Fetch rules from backend and flatten them
   const fetchRules = async () => {
@@ -170,7 +170,7 @@ export default function ExistingRules() {
 
               {/* Status Button */}
               <button
-                className={`flex-1 md:flex-none px-6 py-2 rounded-lg font-bold transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md ${rule.active
+                className={`flex-1 md:flex-none px-6 py-2 rounded-lg font-bold transition-all duration-200 cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-md ${rule.active
                   ? "bg-gradient-to-r from-green-400 to-green-600 text-white hover:from-green-500 hover:to-green-700"
                   : "bg-gradient-to-r from-gray-300 to-gray-400 text-gray-600 cursor-not-allowed"}`}
                 onClick={() => toggleRule(rule.id)}
@@ -180,7 +180,7 @@ export default function ExistingRules() {
 
               {/* Delete Button */}
               <button
-                className="flex-1 md:flex-none px-6 py-2 rounded-lg bg-gradient-to-r from-red-500 to-red-600 text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
+                className="flex-1 md:flex-none px-6 py-2 rounded-lg bg-gradient-to-r from-red-500 to-red-600 cursor-pointer text-white font-bold hover:from-red-600 hover:to-red-700 transition-all duration-200 shadow-md focus:outline-none focus:ring-2 focus:ring-red-400"
                 onClick={() => deleteRule(rule.id)}
               >
                 Delete
