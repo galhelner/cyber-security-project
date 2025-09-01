@@ -1,5 +1,5 @@
-import { RuleMode } from "../types/ruleMode";
-import { FirewallItem } from "./firewallItem";
+import { RuleMode } from "../types/ruleMode.js";
+import { FirewallItem } from "./firewallItem.js";
 
 /**
  * Interface represents the get rules response body

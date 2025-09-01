@@ -11,7 +11,7 @@ const envSchema = z.object({
   .int()
   .min(1, "Port must be at least 1")
   .max(65535, "Port cannot be greater than 65535")
-  .default(3000),
+  .default(5000),
   DB_CONNECTION_INTERVAL: z.coerce.number().default(5000),
   DATABASE_URL: z.string().refine((val) => {
     try {
@@ -21,6 +21,14 @@ const envSchema = z.object({
       return false;
     }
   }, { message: "DATABASE_URL must be a valid URL"}),
+  FRONTEND_URL: z.string().refine((val) => {
+    try {
+      new URL(val);
+      return true;
+    } catch {
+      return false;
+    }
+  }),
   JWT_SECRET: z.string().min(10),
 });
 

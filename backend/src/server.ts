@@ -1,9 +1,9 @@
-import { createApp } from './app';
-import { env } from './config/env';
-import { Logger } from './config/logger';
+import { createApp } from './app.js';
+import { env } from './config/env.js';
+import { Logger } from './config/logger.js';
 
 const logger = Logger.getInstance();
-const PORT = env.PORT || 3000;
+const PORT = env.PORT || 5000;
 
 async function startServer() {
     const app = await createApp();

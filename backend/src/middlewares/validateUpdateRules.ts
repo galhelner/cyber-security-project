@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { FirewallRulesRequest } from "../models/firewallRulesRequest";
+import { FirewallRulesRequest } from "../models/firewallRulesRequest.js";
 
 /**
  * Middleware for update firewall rules request body validation

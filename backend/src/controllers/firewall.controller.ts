@@ -1,12 +1,12 @@
 import { Request, Response } from 'express';
-import { Database } from '../config/db';
-import { firewallRulesSchema } from "../config/firewallRulesSchema";
-import { RuleMode } from '../types/ruleMode';
-import { FirewallRulesResponse } from '../models/firewallRulesResponse';
-import { FirewallRulesRequest } from '../models/firewallRulesRequest';
-import { RuleType } from '../types/ruleType';
+import { Database } from '../config/db.js';
+import { firewallRulesSchema } from "../config/firewallRulesSchema.js";
+import { RuleMode } from '../types/ruleMode.js';
+import { FirewallRulesResponse } from '../models/firewallRulesResponse.js';
+import { FirewallRulesRequest } from '../models/firewallRulesRequest.js';
+import { RuleType } from '../types/ruleType.js';
 import { inArray, and, eq } from 'drizzle-orm';
-import { Logger } from '../config/logger';
+import { Logger } from '../config/logger.js';
 
 const logger = Logger.getInstance();
 const database = Database.getInstance();
@@ -56,6 +56,8 @@ export const addIPs = async (req: Request, res: Response) => {
             values,
             status: "success",
         });
+
+        logger.info(`Added IPs: ${values.join(", ")} in mode: ${mode}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -101,6 +103,8 @@ export const deleteIPs = async (req: Request, res: Response) => {
                 inArray(firewallRulesSchema.value, values)
             )
         );
+
+        logger.info(`Deleted IPs: ${values.join(", ")} from mode: ${mode}`);
 
         return res.json({
             type: RuleType.IP,
@@ -158,6 +162,8 @@ export const addDomains = async (req: Request, res: Response) => {
             values,
             status: "success",
         });
+
+        logger.info(`Added URLs: ${values.join(", ")} in mode: ${mode}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -203,6 +209,8 @@ export const deleteDomains = async (req: Request, res: Response) => {
                 inArray(firewallRulesSchema.value, values)
             )
         );
+
+        logger.info(`Deleted URLs: ${values.join(", ")} from mode: ${mode}`);
 
         return res.json({
             type: RuleType.URL,
@@ -260,6 +268,8 @@ export const addPorts = async (req: Request, res: Response) => {
             values,
             status: "success",
         });
+
+        logger.info(`Added ports: ${values.join(", ")} in mode: ${mode}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });
@@ -306,6 +316,8 @@ export const deletePorts = async (req: Request, res: Response) => {
             )
         );
 
+        logger.info(`Deleted ports: ${values.join(", ")} from mode: ${mode}`);
+
         return res.json({
             type: RuleType.PORT,
             mode,
@@ -329,6 +341,7 @@ export const getRules = async (req: Request, res: Response) => {
             type: firewallRulesSchema.ruleType,
             mode: firewallRulesSchema.ruleMode,
             value: firewallRulesSchema.value,
+            active: firewallRulesSchema.active
         })
         .from(firewallRulesSchema);
 
@@ -343,14 +356,11 @@ export const getRules = async (req: Request, res: Response) => {
             const mode = row.mode as RuleMode;
 
             if (row.type === RuleType.IP) {
-                response.ips[mode].push({ id: row.id, value: row.value });
+                response.ips[mode].push({ id: row.id, value: row.value, active: row.active });
             } else if (row.type === RuleType.URL) {
-                response.urls[mode].push({ id: row.id, value: row.value });
+                response.urls[mode].push({ id: row.id, value: row.value, active: row.active });
             } else if (row.type === RuleType.PORT) {
-                response.ports[mode].push({
-                    id: row.id,
-                    value: row.value,
-                });
+                response.ports[mode].push({ id: row.id, value: row.value, active: row.active });
             }
         });
 
@@ -400,6 +410,8 @@ export const updateRules = async (req: Request, res: Response) => {
         }
 
         res.json({ updated });
+
+        logger.info(`Updated rules: ${JSON.stringify(updated)}`);
     } catch (err) {
         logger.error(err);
         res.status(500).json({ error: 'Internal server error' });

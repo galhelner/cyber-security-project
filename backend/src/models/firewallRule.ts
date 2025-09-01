@@ -1,5 +1,5 @@
-import { RuleMode } from "../types/ruleMode";
-import { RuleType } from "../types/ruleType";
+import { RuleMode } from "../types/ruleMode.js";
+import { RuleType } from "../types/ruleType.js";
 
 /**
  * Interface represent the firewall rule model in DB

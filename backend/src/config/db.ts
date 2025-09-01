@@ -1,7 +1,7 @@
-import { env } from "./env";
+import { env } from "./env.js";
 import { Pool } from "pg";
 import { drizzle } from "drizzle-orm/node-postgres";
-import { Logger } from "./logger";
+import { Logger } from "./logger.js";
 
 const logger = Logger.getInstance();
 
