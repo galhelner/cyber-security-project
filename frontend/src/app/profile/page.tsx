@@ -1,7 +1,7 @@
 export default function Profile() {
   return (
-    <div>
-        <h1>Profile</h1>
+    <div className="flex flex-col flex-1 items-center">
+        <h1 className='text-4xl'>Profile</h1>
     </div>
   );
 }

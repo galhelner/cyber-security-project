@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { Home } from "lucide-react";
+import Image from "next/image";
 
 export default function Navbar() {
   return (
@@ -9,20 +10,20 @@ export default function Navbar() {
       {/* Left side: Logo */}
       <div className="flex items-center space-x-4">
         <button className="text-xl font-bold hover:text-blue-400">
-          <img src="/cyber-logo.png" alt="Logo" className="h-8 w-8 inline-block mr-2" />
+          <Image src="/cyber-logo.png" alt="Logo" className="h-8 w-8 inline-block mr-2"  width={35} height={35}/>
           <Link href="/">Cyber Security</Link>
         </button>
       </div>
 
       {/* Center: Navigation Links */}
       <div className="flex space-x-6">
-        <Link href="/overview" className="hover:text-blue-400">Overview</Link>
-        <Link href="/kernel-modules" className="hover:text-blue-400">Kernel Modules</Link>
-        <Link href="/firewall-rules" className="hover:text-blue-400">Firewall Rules</Link>
-        <Link href="/api-interface" className="hover:text-blue-400">API Interface</Link>
-        <Link href="/logs-testing" className="hover:text-blue-400">Logs & Testing</Link>
-        <Link href="/settings" className="hover:text-blue-400">Settings</Link>
-        <Link href="/profile" className="hover:text-blue-400">Profile</Link>
+        <Link href="/overview" className="hover:text-blue-400 cursor-pointer">Overview</Link>
+        <Link href="/kernel-modules" className="hover:text-blue-400 cursor-pointer">Kernel Modules</Link>
+        <Link href="/firewall-rules" className="hover:text-blue-400 cursor-pointer">Firewall Rules</Link>
+        <Link href="/api-interface" className="hover:text-blue-400 cursor-pointer">API Interface</Link>
+        <Link href="/logs-testing" className="hover:text-blue-400 cursor-pointer">Logs & Testing</Link>
+        <Link href="/settings" className="hover:text-blue-400 cursor-pointer">Settings</Link>
+        <Link href="/profile" className="hover:text-blue-400 cursor-pointer">Profile</Link>
       </div>
 
       {/* Right side: Home icon */}
